@@ -1,6 +1,11 @@
 import JobList from "../components/JobList";
 import { jobs } from "../lib/fake-data";
 
+/**
+ * HomePage Component
+ *
+ * @returns {*}
+ */
 const HomePage = () => {
   return (
     <div>

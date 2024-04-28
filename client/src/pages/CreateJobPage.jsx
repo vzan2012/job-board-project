@@ -1,9 +1,19 @@
 import { useState } from "react";
 
+/**
+ * CreateJobPage Component
+ *
+ * @returns {*}
+ */
 const CreateJobPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  /**
+   * Submit Handler
+   *
+   * @param {*} e
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("should post a new job", { title, description });

@@ -2,7 +2,7 @@
 // it's simpler, but in a real application you may want to use cookies instead
 // for better security. Also, it doesn't handle token expiration.
 
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const API_URL = import.meta.env.API_URL;
 const ACCESS_TOKEN_KEY = import.meta.env.ACCESS_TOKEN_KEY;

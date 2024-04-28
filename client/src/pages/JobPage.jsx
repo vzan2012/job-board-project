@@ -3,6 +3,11 @@ import { jobs } from "../lib/fake-data";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
+/**
+ * JobPage Component
+ *
+ * @returns {*}
+ */
 const JobPage = () => {
   const { jobId } = useParams();
 

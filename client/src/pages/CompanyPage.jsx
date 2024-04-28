@@ -1,6 +1,11 @@
 import { useParams } from "react-router";
 import { companies } from "../lib/fake-data";
 
+/**
+ * CompanyPage Component
+ *
+ * @returns {*}
+ */
 const CompanyPage = () => {
   const { companyId } = useParams();
 
