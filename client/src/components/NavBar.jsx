@@ -1,5 +1,5 @@
-import React from "react";
-
+/* eslint-disable react/prop-types */
+import { Link } from "react-router-dom";
 import { logout } from "../lib/auth";
 
 /**
@@ -46,7 +46,6 @@ const NavBar = ({ user, onLogout }) => {
         <Link className="navbar-item" to="/jobs/new">
           Post Job
         </Link>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="navbar-item" onClick={handleLogout}>
           Logout
         </a>

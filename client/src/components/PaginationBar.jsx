@@ -1,5 +1,4 @@
-import React from "react";
-
+/* eslint-disable react/prop-types */
 /**
  * Custom Range Function
  *
@@ -75,7 +74,7 @@ const PageButton = ({ page, currentPage, onClick }) => {
  *
  * @returns {*}
  */
-const PaginationBar = () => {
+const PaginationBar = ({ currentPage, totalPages, onPageChange }) => {
   const pages = getVisiblePages(currentPage, totalPages);
   return (
     <nav
@@ -93,7 +92,7 @@ const PaginationBar = () => {
       </button>
       <button
         className="pagination-next"
-        arial-label="Next page"
+        aria-label="Next page"
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
       >
