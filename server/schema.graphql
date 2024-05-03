@@ -3,9 +3,46 @@ type Query {
   jobs: [Job!]
 }
 
-type Job {
+"""
+Companies posted jobs
+"""
+type Company {
+  """
+  Company Id
+  """
   id: ID!
+  """
+  Name of the Company
+  """
+  name: String!
+  """
+  Description of the Company
+  """
+  description: String
+}
+
+"""
+Represents the job position for the job board
+"""
+type Job {
+  """
+  Job Id
+  """
+  id: ID!
+  """
+  Job Title
+  """
   title: String!
-  description: String!
+  """
+  Description of the Job
+  """
+  description: String
+  """
+  The date when the job was publised, in ISO-8601 format. Eg: 2024-04-01
+  """
   date: String!
+  """
+  Job posting created by the Company
+  """
+  company: Company!
 }

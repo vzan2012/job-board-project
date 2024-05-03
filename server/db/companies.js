@@ -8,7 +8,7 @@ import { connection } from "./connection.js";
 const getCompanyTable = () => connection.table("company");
 
 /**
- * Get Company by ID
+ * Get Company by Job ID
  *
  * @async
  * @param {*} id
