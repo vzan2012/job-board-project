@@ -24,7 +24,7 @@ await apolloServer.start();
 app.use(cors(), express.json(), authMiddleware);
 
 app.post("/login", handleLogin);
-app.use("/graphql", apolloMiddleware(apolloServer));
+app.use(`/${graphqlPathName}`, apolloMiddleware(apolloServer));
 
 app.listen({ port }, () => {
   console.log(`Server running on port ${port}`);
