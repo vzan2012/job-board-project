@@ -32,8 +32,8 @@ const JobItem = ({ job }) => {
 const JobList = ({ jobs }) => {
   return (
     <ul className="box">
-      {jobs.map((job) => (
-        <JobItem key={job.id} job={job} />
+      {jobs?.map((job) => (
+        <JobItem key={job?.id} job={job} />
       ))}
     </ul>
   );
