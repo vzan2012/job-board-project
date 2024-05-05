@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import "./App.css";
 import { Route, Routes, useNavigate } from "react-router";
 import { getUser } from "./lib/auth";
 import Navbar from "./components/NavBar";

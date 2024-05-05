@@ -1,5 +1,8 @@
+import { useState, useEffect } from "react";
+
 import { useParams } from "react-router";
-import { companies } from "../lib/fake-data";
+
+import { getCompanyById } from "../lib/queries";
 
 /**
  * CompanyPage Component
@@ -9,7 +12,13 @@ import { companies } from "../lib/fake-data";
 const CompanyPage = () => {
   const { companyId } = useParams();
 
-  const company = companies.find((company) => company.id === companyId);
+  const [company, setCompany] = useState({});
+
+  useEffect(() => {
+    const getCompanyData = (companyId) => getCompanyById(companyId);
+
+    getCompanyData(companyId).then(setCompany);
+  }, [companyId]);
 
   return (
     <div>
