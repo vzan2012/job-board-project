@@ -73,6 +73,11 @@ export const getCompanyById = async (id) => {
         id
         name
         description
+        jobs {
+          id
+          title
+          date
+        }
       }
     }
   `;

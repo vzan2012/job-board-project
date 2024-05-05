@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 
 import { getCompanyById } from "../lib/queries";
+import JobList from "../components/JobList";
 
 /**
  * CompanyPage Component
@@ -20,10 +21,16 @@ const CompanyPage = () => {
     getCompanyData(companyId).then(setCompany);
   }, [companyId]);
 
+  if (!company) return <div>Loading ...</div>;
+
+  const { name, description, jobs } = company;
+
   return (
     <div>
-      <h1 className="title">{company.name}</h1>
-      <div className="box">{company.description}</div>
+      <h1 className="title">{name}</h1>
+      <div className="box">{description}</div>
+      <h2 className="title is-5">Jobs at {name}</h2>
+      <JobList jobs={jobs} />
     </div>
   );
 };

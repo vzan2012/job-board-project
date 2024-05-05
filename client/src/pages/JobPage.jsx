@@ -20,17 +20,19 @@ const JobPage = () => {
 
   if (!job) return <div>Loading ...</div>;
 
+  const { title, company, date, description } = job;
+
   return (
     <div>
-      <h1 className="title is-2">{job?.title}</h1>
+      <h1 className="title is-2">{title}</h1>
       <h2 className="subtitle is-4">
-        <Link to={`/companies/${job?.company?.id}`}>{job?.company?.name}</Link>
+        <Link to={`/companies/${company?.id}`}>{company?.name}</Link>
       </h2>
       <div className="box">
         <div className="block has-text-grey">
-          Posted: {job?.date ? formatDate(job?.date, "long") : ""}
+          Posted: {date ? formatDate(date, "long") : ""}
         </div>
-        <p className="block">{job?.description}</p>
+        <p className="block">{description}</p>
       </div>
     </div>
   );
