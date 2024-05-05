@@ -13,7 +13,7 @@ type Query {
   """
   Jobs Array
   """
-  jobs: [Job!]
+  jobs: [Job!]!
 }
 
 """
@@ -32,6 +32,10 @@ type Company {
   Description of the Company
   """
   description: String
+  """
+  Jobs Posted by the Company
+  """
+  jobs: [Job!]
 }
 
 """

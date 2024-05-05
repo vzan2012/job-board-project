@@ -17,6 +17,16 @@ const getJobTable = () => connection.table("job");
 export const getJobs = async () => await getJobTable().select();
 
 /**
+ * Get Jobs by Company
+ *
+ * @async
+ * @param {*} companyId
+ * @returns {unknown}
+ */
+export const getJobsByCompany = async (companyId) =>
+  await getJobTable().select().where({ companyId });
+
+/**
  * Get Job by Id
  *
  * @async

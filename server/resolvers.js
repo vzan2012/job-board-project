@@ -1,4 +1,4 @@
-import { getJobs, getJob } from "./db/jobs.js";
+import { getJobs, getJob, getJobsByCompany } from "./db/jobs.js";
 import { getCompany } from "./db/companies.js";
 
 /**
@@ -15,6 +15,9 @@ export const resolvers = {
   Job: {
     date: ({ createdAt }) => toISODate(createdAt),
     company: ({ companyId }) => getCompany(companyId),
+  },
+  Company: {
+    jobs: ({ id }) => getJobsByCompany(id),
   },
 };
 
