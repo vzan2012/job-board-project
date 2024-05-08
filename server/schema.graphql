@@ -3,12 +3,12 @@ type Query {
   """
   Get Company by ID
   """
-  company(id: ID!): Company
+  company(id: ID!): Company!
 
   """
   Get Job by ID
   """
-  job(id: ID!): Job
+  job(id: ID!): Job!
 
   """
   Jobs Array
