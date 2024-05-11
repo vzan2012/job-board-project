@@ -4,8 +4,8 @@
 
 import { jwtDecode } from "jwt-decode";
 
-const API_URL = import.meta.env.API_URL;
-const ACCESS_TOKEN_KEY = import.meta.env.ACCESS_TOKEN_KEY;
+const API_URL = import.meta.env.VITE_API_URL;
+const ACCESS_TOKEN_KEY = import.meta.env.VITE_ACCESS_TOKEN_KEY;
 
 /**
  * Get Access Token from LocalStorage
@@ -50,7 +50,9 @@ export const getUser = () => {
  * @returns {unknown}
  */
 export const login = async (email, password) => {
-  const response = await fetch(`${API_URL}`, {
+  console.log("API_URL: " + API_URL);
+  console.log("Access Token: " + ACCESS_TOKEN_KEY);
+  const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

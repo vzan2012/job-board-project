@@ -63,3 +63,18 @@ type Job {
   """
   company: Company!
 }
+
+"""
+Create Job Input
+"""
+input CreateJobInput {
+  title: String!
+  description: String
+}
+
+"""
+Mutation
+"""
+type Mutation {
+  createJob(input: CreateJobInput!): Job!
+}

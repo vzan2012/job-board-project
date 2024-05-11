@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { createJob } from "../lib/queries";
 
 /**
  * CreateJobPage Component
@@ -6,6 +9,7 @@ import { useState } from "react";
  * @returns {*}
  */
 const CreateJobPage = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -14,9 +18,11 @@ const CreateJobPage = () => {
    *
    * @param {*} e
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("should post a new job", { title, description });
+    const job = await createJob({ title, description });
+    console.log(job);
+    navigate(`/`);
   };
 
   return (

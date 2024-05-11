@@ -2,7 +2,7 @@ import { GraphQLClient, gql } from "graphql-request";
 
 const GRAPHQL_URL = import.meta.env.VITE_API_URL;
 
-const client = new GraphQLClient(GRAPHQL_URL);
+const client = new GraphQLClient(`${GRAPHQL_URL}/graphql`);
 
 /**
  * Get Jobs - Query
@@ -85,4 +85,34 @@ export const getCompanyById = async (id) => {
   const { company } = await client.request(query, { id });
 
   return company;
+};
+
+/**
+ * Description placeholder
+ *
+ * @async
+ * @param {{ title: any; description: any; }} input
+ * @param {*} input.title
+ * @param {*} input.description
+ * @returns {unknown}
+ */
+export const createJob = async ({ title, description }) => {
+  const mutation = gql`
+    mutation CreateJob($input: CreateJobInput!) {
+      job: createJob(input: $input) {
+        id
+        title
+        description
+      }
+    }
+  `;
+
+  const { job } = await client.request(mutation, {
+    input: {
+      title,
+      description,
+    },
+  });
+
+  return job;
 };
