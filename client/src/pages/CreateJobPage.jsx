@@ -21,8 +21,9 @@ const CreateJobPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const job = await createJob({ title, description });
-    console.log(job);
-    navigate(`/`);
+    const { id: jobId } = job;
+
+    navigate(`/jobs/${jobId}`);
   };
 
   return (

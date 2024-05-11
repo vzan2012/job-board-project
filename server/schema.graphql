@@ -73,8 +73,19 @@ input CreateJobInput {
 }
 
 """
+Update Job Input
+"""
+input UpdateJobInput {
+  id: String!
+  title: String!
+  description: String
+}
+
+"""
 Mutation
 """
 type Mutation {
-  createJob(input: CreateJobInput!): Job!
+  createJob(input: CreateJobInput!): Job
+  deleteJob(id: ID!): Job
+  updateJob(input: UpdateJobInput!): Job
 }

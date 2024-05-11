@@ -44,6 +44,7 @@ export const getJobById = async (id) => {
       job(id: $id) {
         id
         title
+        date
         description
         company {
           id

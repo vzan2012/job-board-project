@@ -1,5 +1,12 @@
 import { GraphQLError } from "graphql";
-import { getJobs, getJob, getJobsByCompany, createJob } from "./db/jobs.js";
+import {
+  getJobs,
+  getJob,
+  getJobsByCompany,
+  createJob,
+  deleteJob,
+  updateJob,
+} from "./db/jobs.js";
 import { getCompany } from "./db/companies.js";
 
 /**
@@ -34,6 +41,18 @@ export const resolvers = {
     createJob: async (_root, { input: { title, description } }) => {
       const companyId = "FjcJCHJALA4i";
       return await createJob({ companyId, title, description });
+    },
+    deleteJob: async (_root, { id }) => {
+      const { id: jobId } = await deleteJob(id);
+      if (!jobId) throw notFoundError(`No Job Found with ID: ${jobId}`);
+
+      return `Job Id: ${jobId} post has been deleted`;
+    },
+    updateJob: async (_root, { input: { id, title, description } }) => {
+      const job = await updateJob({ id, title, description });
+      if (!id) throw notFoundError(`No Job Found with ID: ${id}`);
+
+      return job;
     },
   },
 };
