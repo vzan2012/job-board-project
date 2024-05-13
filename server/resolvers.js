@@ -38,21 +38,30 @@ export const resolvers = {
     jobs: ({ id }) => getJobsByCompany(id),
   },
   Mutation: {
-    createJob: async (_root, { input: { title, description } }) => {
-      const companyId = "FjcJCHJALA4i";
+    createJob: async (_root, { input: { title, description } }, { user }) => {
+      // Checking user is authorized or not
+      if (!user) throw unauthorizedError("User is not authorized");
+
+      const companyId = user.companyId;
       return await createJob({ companyId, title, description });
     },
-    deleteJob: async (_root, { id }) => {
-      const { id: jobId } = await deleteJob(id);
-      if (!jobId) throw notFoundError(`No Job Found with ID: ${jobId}`);
+    deleteJob: async (_root, { id }, { user }) => {
+      // Checking user is authorized or not
+      if (!user) throw unauthorizedError("User is not authorized");
 
-      return `Job Id: ${jobId} post has been deleted`;
+      const deletedJob = await deleteJob(id);
+      if (!deletedJob) throw notFoundError(`No Job Found with ID: ${id}`);
+
+      return deletedJob;
     },
     updateJob: async (_root, { input: { id, title, description } }) => {
-      const job = await updateJob({ id, title, description });
+      // Checking user is authorized or not
+      if (!user) throw unauthorizedError("User is not authorized");
+
+      const updatedJob = await updateJob({ id, title, description });
       if (!id) throw notFoundError(`No Job Found with ID: ${id}`);
 
-      return job;
+      return updatedJob;
     },
   },
 };
@@ -67,6 +76,20 @@ const notFoundError = (message) => {
   return new GraphQLError(message, {
     extensions: {
       code: "NOT FOUND",
+    },
+  });
+};
+
+/**
+ * Unauthorized Error
+ *
+ * @param {*} message
+ * @returns {*}
+ */
+const unauthorizedError = (message) => {
+  return new GraphQLError(message, {
+    extensions: {
+      code: "UNAUTHORIZED",
     },
   });
 };

@@ -7,6 +7,7 @@ import { expressMiddleware as apolloMiddleware } from "@apollo/server/express4";
 
 import { resolvers } from "./resolvers.js";
 import { authMiddleware, handleLogin } from "./auth.js";
+import { getUser } from "./db/users.js";
 
 const port = process.env.PORT;
 const environment = process.env.ENVIRONMENT;
@@ -21,10 +22,31 @@ const apolloServer = new ApolloServer({ typeDefs, resolvers });
 
 await apolloServer.start();
 
+/**
+ * Get User Context
+ *
+ * @async
+ * @param {{ req: any; }} param0
+ * @param {*} param0.req
+ * @returns {unknown}
+ */
+const getContext = async ({ req }) => {
+  if (req.auth) {
+    const user = await getUser(req.auth.sub);
+    return { user };
+  }
+  return {};
+};
+
 app.use(cors(), express.json(), authMiddleware);
 
 app.post("/login", handleLogin);
-app.use(`/${graphqlPathName}`, apolloMiddleware(apolloServer));
+app.use(
+  `/${graphqlPathName}`,
+  apolloMiddleware(apolloServer, {
+    context: getContext,
+  })
+);
 
 app.listen({ port }, () => {
   console.log(`Server running on port ${port}`);

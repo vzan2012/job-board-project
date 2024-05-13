@@ -50,8 +50,6 @@ export const getUser = () => {
  * @returns {unknown}
  */
 export const login = async (email, password) => {
-  console.log("API_URL: " + API_URL);
-  console.log("Access Token: " + ACCESS_TOKEN_KEY);
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
