@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { useParams } from "react-router";
 
-import { getCompanyById } from "../lib/queries";
+import { getCompanyById } from "../lib/graphql/queries";
 import JobList from "../components/JobList";
 
 /**

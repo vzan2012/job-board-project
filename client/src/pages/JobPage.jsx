@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { formatDate } from "../lib/formatters";
+import { formatDate } from "../lib/utils/formatters";
 
-import { getJobById } from "../lib/queries";
+import { getJobById } from "../lib/graphql/queries";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 

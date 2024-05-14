@@ -26,8 +26,6 @@ const LoginPage = ({ onLogin }) => {
 
     const user = await login(email, password);
 
-    console.log(user);
-
     if (user) return onLogin(user);
 
     setError(true);

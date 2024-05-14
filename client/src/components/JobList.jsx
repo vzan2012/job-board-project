@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-import { formatDate } from "../lib/formatters";
+import { formatDate } from "../lib/utils/formatters";
 
 /**
  * Job Item

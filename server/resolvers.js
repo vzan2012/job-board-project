@@ -49,16 +49,23 @@ export const resolvers = {
       // Checking user is authorized or not
       if (!user) throw unauthorizedError("User is not authorized");
 
-      const deletedJob = await deleteJob(id);
+      const deletedJob = await deleteJob(id, user.companyId);
       if (!deletedJob) throw notFoundError(`No Job Found with ID: ${id}`);
 
       return deletedJob;
     },
-    updateJob: async (_root, { input: { id, title, description } }) => {
+    updateJob: async (
+      _root,
+      { input: { id, title, description } },
+      { user }
+    ) => {
       // Checking user is authorized or not
       if (!user) throw unauthorizedError("User is not authorized");
 
-      const updatedJob = await updateJob({ id, title, description });
+      const updatedJob = await updateJob(
+        { id, title, description },
+        user.companyId
+      );
       if (!id) throw notFoundError(`No Job Found with ID: ${id}`);
 
       return updatedJob;

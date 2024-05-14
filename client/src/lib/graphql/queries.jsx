@@ -1,8 +1,26 @@
-import { GraphQLClient, gql } from "graphql-request";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { GraphQLClient } from "graphql-request";
+import { getAccessToken } from "../auth";
 
 const GRAPHQL_URL = import.meta.env.VITE_API_URL;
 
-const client = new GraphQLClient(`${GRAPHQL_URL}/graphql`);
+// TODO: Need to Apollo Client for cache
+// const apolloClient = new ApolloClient({
+//   url: `${GRAPHQL_URL}/graphql`,
+//   cache: new InMemoryCache(),
+// });
+
+const client = new GraphQLClient(`${GRAPHQL_URL}/graphql`, {
+  headers: () => {
+    const accessToken = getAccessToken();
+
+    if (accessToken) {
+      return { Authorization: `Bearer ${accessToken}` };
+    }
+
+    return {};
+  },
+});
 
 /**
  * Get Jobs - Query

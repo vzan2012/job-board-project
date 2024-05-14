@@ -65,8 +65,8 @@ export const createJob = async ({ companyId, title, description }) => {
  * @param {*} id
  * @returns {unknown}
  */
-export const deleteJob = async (id) => {
-  const job = await getJobTable().first().where({ id });
+export const deleteJob = async (id, companyId) => {
+  const job = await getJobTable().first().where({ id, companyId });
   if (!job) {
     throw new Error(`Job not found: ${id}`);
   }
@@ -84,8 +84,8 @@ export const deleteJob = async (id) => {
  * @param {*} param0.description
  * @returns {unknown}
  */
-export const updateJob = async ({ id, title, description }) => {
-  const job = await getJobTable().first().where({ id });
+export const updateJob = async ({ id, title, description }, companyId) => {
+  const job = await getJobTable().first().where({ id, companyId });
   if (!job) {
     throw new Error(`Job not found: ${id}`);
   }
