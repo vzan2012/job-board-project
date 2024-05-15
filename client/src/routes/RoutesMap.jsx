@@ -1,8 +1,11 @@
-import CompanyPage from "../pages/CompanyPage";
-import CreateJobPage from "../pages/CreateJobPage";
-import HomePage from "../pages/HomePage";
-import JobPage from "../pages/JobPage";
-import LoginPage from "../pages/LoginPage";
+import { lazy } from "react";
+
+// Lazy Load
+const LazyCompanyPage = lazy(() => import("../pages/CompanyPage"));
+const LazyCreateJobPage = lazy(() => import("../pages/CreateJobPage"));
+const LazyHomePage = lazy(() => import("../pages/HomePage"));
+const LazyJobPage = lazy(() => import("../pages/JobPage"));
+const LazyLoginPage = lazy(() => import("../pages/LoginPage"));
 
 /**
  * RoutesMap - Page Routes
@@ -15,28 +18,28 @@ export const RoutesMap = ({ requestLoginHandler }) => {
   return [
     {
       path: "/",
-      component: HomePage,
+      component: LazyHomePage,
       index: true,
     },
     {
       path: "/companies/:companyId",
-      component: CompanyPage,
+      component: LazyCompanyPage,
       index: false,
     },
     {
       path: "/jobs/new",
-      component: CreateJobPage,
+      component: LazyCreateJobPage,
       index: false,
     },
     {
       path: "/jobs/:jobId",
-      component: JobPage,
+      component: LazyJobPage,
       index: false,
     },
     {
       path: "/login",
       component: (props) => (
-        <LoginPage {...props} onLogin={requestLoginHandler} />
+        <LazyLoginPage {...props} onLogin={requestLoginHandler} />
       ),
       index: false,
     },

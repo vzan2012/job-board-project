@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, Suspense, lazy } from "react";
 
 import { Route, Routes, useNavigate } from "react-router";
 import { getUser } from "./lib/auth";
-import Navbar from "./components/NavBar";
 import { RoutesMap } from "./routes/RoutesMap";
+
+// Lazy Load
+const LazyNavBar = lazy(() => import("./components/NavBar"));
 
 const App = () => {
   const navigate = useNavigate();
@@ -21,19 +23,21 @@ const App = () => {
 
   return (
     <>
-      <Navbar user={user} onLogout={handleLogout} />
-      <main className="section">
-        <Routes>
-          {RoutesMap({ requestLoginHandler: handleLogin }).map((route) => (
-            <Route
-              key={route.path}
-              path={route.path}
-              element={<route.component />}
-              exact={route.index}
-            />
-          ))}
-        </Routes>
-      </main>
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyNavBar user={user} onLogout={handleLogout} />
+        <main className="section">
+          <Routes>
+            {RoutesMap({ requestLoginHandler: handleLogin }).map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<route.component />}
+                exact={route.index}
+              />
+            ))}
+          </Routes>
+        </main>
+      </Suspense>
     </>
   );
 };
