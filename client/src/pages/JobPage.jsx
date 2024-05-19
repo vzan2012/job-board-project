@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { formatDate } from "../lib/utils/formatters";
+import Loader from "../components/loader/Loader";
 
 import { getJobById } from "../lib/graphql/queries";
 import { useParams } from "react-router";
@@ -18,7 +19,7 @@ const JobPage = () => {
     getJobById(jobId).then(setJob);
   }, [jobId]);
 
-  if (!job) return <div>Loading ...</div>;
+  if (!job) return <Loader />;
 
   const { title, company, date, description } = job;
 

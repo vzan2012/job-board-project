@@ -3,6 +3,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { useParams } from "react-router";
 
 import { getCompanyById } from "../lib/graphql/queries";
+import Loader from "../components/loader/Loader";
 
 // Lazy Load
 const LazyJobList = lazy(() => import("../components/JobList"));
@@ -40,7 +41,7 @@ const CompanyPage = () => {
   const { company, loading } = state;
 
   if (loading) {
-    <div>Loading ...</div>;
+    <Loader />;
   } else {
     <div className="has-text-danger">Data Unavailable</div>;
   }
@@ -50,7 +51,7 @@ const CompanyPage = () => {
       <h1 className="title">{company?.name}</h1>
       <div className="box">{company?.description}</div>
       <h2 className="title is-5">Jobs at {company?.name}</h2>
-      <Suspense loading={<div>Loading...</div>}>
+      <Suspense loading={<Loader />}>
         <LazyJobList jobs={company?.jobs} />
       </Suspense>
     </div>

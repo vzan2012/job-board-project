@@ -3,6 +3,7 @@ import { useState, Suspense, lazy } from "react";
 import { Route, Routes, useNavigate } from "react-router";
 import { getUser } from "./lib/auth";
 import { RoutesMap } from "./routes/RoutesMap";
+import Loader from "./components/loader/Loader";
 
 // Lazy Load
 const LazyNavBar = lazy(() => import("./components/NavBar"));
@@ -23,7 +24,7 @@ const App = () => {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <LazyNavBar user={user} onLogout={handleLogout} />
         <main className="section">
           <Routes>

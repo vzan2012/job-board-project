@@ -1,29 +1,36 @@
 import {
-  //  ApolloClient,
-  //  InMemoryCache,
+  ApolloClient,
+  InMemoryCache,
   gql,
+  concat,
+  createHttpLink,
+  ApolloLink,
 } from "@apollo/client";
-import { GraphQLClient } from "graphql-request";
 import { getAccessToken } from "../auth";
 
 const GRAPHQL_URL = import.meta.env.VITE_API_URL;
 
-// TODO: Need to Apollo Client for cache
-// const apolloClient = new ApolloClient({
-//   url: `${GRAPHQL_URL}/graphql`,
-//   cache: new InMemoryCache(),
-// });
+const httpLink = createHttpLink({
+  uri: `${GRAPHQL_URL}/graphql`,
+});
 
-const client = new GraphQLClient(`${GRAPHQL_URL}/graphql`, {
-  headers: () => {
-    const accessToken = getAccessToken();
+const authLink = new ApolloLink((operation, forward) => {
+  const accessToken = getAccessToken();
 
-    if (accessToken) {
-      return { Authorization: `Bearer ${accessToken}` };
-    }
+  if (accessToken) {
+    operation.setContext({
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  }
 
-    return {};
-  },
+  return forward(operation);
+});
+
+const apolloClient = new ApolloClient({
+  link: concat(authLink, httpLink),
+  cache: new InMemoryCache(),
 });
 
 /**
@@ -49,7 +56,10 @@ export const getJobs = async () => {
     }
   `;
 
-  const { jobs } = await client.request(query);
+  const {
+    data: { jobs },
+  } = await apolloClient.query({ query });
+
   return jobs;
 };
 
@@ -77,8 +87,14 @@ export const getJobById = async (id) => {
     }
   `;
 
-  const { job } = await client.request(query, { id });
-
+  const {
+    data: { job },
+  } = await apolloClient.query({
+    query,
+    variables: {
+      id,
+    },
+  });
   return job;
 };
 
@@ -105,7 +121,14 @@ export const getCompanyById = async (id) => {
     }
   `;
 
-  const { company } = await client.request(query, { id });
+  const {
+    data: { company },
+  } = await apolloClient.query({
+    query,
+    variables: {
+      id,
+    },
+  });
 
   return company;
 };
@@ -130,10 +153,15 @@ export const createJob = async ({ title, description }) => {
     }
   `;
 
-  const { job } = await client.request(mutation, {
-    input: {
-      title,
-      description,
+  const {
+    data: { job },
+  } = await apolloClient.mutate({
+    mutation,
+    variables: {
+      input: {
+        title,
+        description,
+      },
     },
   });
 
