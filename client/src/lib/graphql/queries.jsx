@@ -34,6 +34,57 @@ const apolloClient = new ApolloClient({
 });
 
 /**
+ * Job Detail - Fragment
+ *
+ * @type {*}
+ */
+const jobDetailFragment = gql`
+  fragment JobDetail on Job {
+    id
+    title
+    date
+    description
+    company {
+      id
+      name
+      description
+    }
+  }
+`;
+
+/**
+ * Company Detail - Fragment
+ *
+ * @type {*}
+ */
+const companyDetailFragment = gql`
+  fragment CompanyDetail on Company {
+    id
+    name
+    description
+    jobs {
+      id
+      title
+      date
+    }
+  }
+`;
+
+/**
+ * Jobs By ID - Query
+ *
+ * @type {*}
+ */
+const jobByIdQuery = gql`
+  query JobById($id: ID!) {
+    job(id: $id) {
+      ...JobDetail
+    }
+  }
+  ${jobDetailFragment}
+`;
+
+/**
  * Get Jobs - Query
  *
  * @async
@@ -43,22 +94,15 @@ export const getJobs = async () => {
   const query = gql`
     query {
       jobs {
-        id
-        title
-        date
-        description
-        company {
-          id
-          name
-          description
-        }
+        ...JobDetail
       }
     }
+    ${jobDetailFragment}
   `;
 
   const {
     data: { jobs },
-  } = await apolloClient.query({ query });
+  } = await apolloClient.query({ query, fetchPolicy: "network-only" });
 
   return jobs;
 };
@@ -71,26 +115,10 @@ export const getJobs = async () => {
  * @returns {unknown}
  */
 export const getJobById = async (id) => {
-  const query = gql`
-    query JobById($id: ID!) {
-      job(id: $id) {
-        id
-        title
-        date
-        description
-        company {
-          id
-          name
-          description
-        }
-      }
-    }
-  `;
-
   const {
     data: { job },
   } = await apolloClient.query({
-    query,
+    query: jobByIdQuery,
     variables: {
       id,
     },
@@ -109,16 +137,10 @@ export const getCompanyById = async (id) => {
   const query = gql`
     query company($id: ID!) {
       company(id: $id) {
-        id
-        name
-        description
-        jobs {
-          id
-          title
-          date
-        }
+        ...CompanyDetail
       }
     }
+    ${companyDetailFragment}
   `;
 
   const {
@@ -146,11 +168,10 @@ export const createJob = async ({ title, description }) => {
   const mutation = gql`
     mutation CreateJob($input: CreateJobInput!) {
       job: createJob(input: $input) {
-        id
-        title
-        description
+        ...JobDetail
       }
     }
+    ${jobDetailFragment}
   `;
 
   const {
@@ -162,6 +183,17 @@ export const createJob = async ({ title, description }) => {
         title,
         description,
       },
+    },
+    update: (cache, result) => {
+      const { data } = result;
+
+      cache.writeQuery({
+        query: jobByIdQuery,
+        variables: {
+          id: data.job.id,
+        },
+        data,
+      });
     },
   });
 

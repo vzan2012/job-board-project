@@ -17,8 +17,6 @@ const HomePage = () => {
     const getJobsData = async () => {
       const data = await getJobs();
 
-      console.log(data);
-
       setJobs(data);
     };
 
