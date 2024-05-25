@@ -28,7 +28,7 @@ const authLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   link: concat(authLink, httpLink),
   cache: new InMemoryCache(),
 });
@@ -71,13 +71,27 @@ const companyDetailFragment = gql`
 `;
 
 /**
- * Jobs By ID - Query
+ * Company by ID - Query
  *
  * @type {*}
  */
-const jobByIdQuery = gql`
-  query JobById($id: ID!) {
-    job(id: $id) {
+export const companyByIdQuery = gql`
+  query company($id: ID!) {
+    company(id: $id) {
+      ...CompanyDetail
+    }
+  }
+  ${companyDetailFragment}
+`;
+
+/**
+ * All Jobs - Query
+ *
+ * @type {*}
+ */
+export const jobsQuery = gql`
+  query {
+    jobs {
       ...JobDetail
     }
   }
@@ -85,75 +99,18 @@ const jobByIdQuery = gql`
 `;
 
 /**
- * Get Jobs - Query
+ * Jobs By ID - Query
  *
- * @async
- * @returns {unknown}
+ * @type {*}
  */
-export const getJobs = async () => {
-  const query = gql`
-    query {
-      jobs {
-        ...JobDetail
-      }
+export const jobByIdQuery = gql`
+  query JobById($id: ID!) {
+    job(id: $id) {
+      ...JobDetail
     }
-    ${jobDetailFragment}
-  `;
-
-  const {
-    data: { jobs },
-  } = await apolloClient.query({ query, fetchPolicy: "network-only" });
-
-  return jobs;
-};
-
-/**
- * Get Job By Id - Query
- *
- * @async
- * @param {*} id
- * @returns {unknown}
- */
-export const getJobById = async (id) => {
-  const {
-    data: { job },
-  } = await apolloClient.query({
-    query: jobByIdQuery,
-    variables: {
-      id,
-    },
-  });
-  return job;
-};
-
-/**
- * Get Company By Id - Query
- *
- * @async
- * @param {*} id
- * @returns {unknown}
- */
-export const getCompanyById = async (id) => {
-  const query = gql`
-    query company($id: ID!) {
-      company(id: $id) {
-        ...CompanyDetail
-      }
-    }
-    ${companyDetailFragment}
-  `;
-
-  const {
-    data: { company },
-  } = await apolloClient.query({
-    query,
-    variables: {
-      id,
-    },
-  });
-
-  return company;
-};
+  }
+  ${jobDetailFragment}
+`;
 
 /**
  * Description placeholder

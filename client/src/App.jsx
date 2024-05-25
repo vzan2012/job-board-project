@@ -4,6 +4,8 @@ import { Route, Routes, useNavigate } from "react-router";
 import { getUser } from "./lib/auth";
 import { RoutesMap } from "./routes/RoutesMap";
 import Loader from "./components/loader/Loader";
+import { ApolloProvider } from "@apollo/client";
+import { apolloClient } from "./lib/graphql/queries";
 
 // Lazy Load
 const LazyNavBar = lazy(() => import("./components/NavBar"));
@@ -23,7 +25,7 @@ const App = () => {
   };
 
   return (
-    <>
+    <ApolloProvider client={apolloClient}>
       <Suspense fallback={<Loader />}>
         <LazyNavBar user={user} onLogout={handleLogout} />
         <main className="section">
@@ -39,7 +41,7 @@ const App = () => {
           </Routes>
         </main>
       </Suspense>
-    </>
+    </ApolloProvider>
   );
 };
 

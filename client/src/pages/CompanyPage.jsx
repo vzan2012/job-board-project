@@ -1,9 +1,8 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 
 import { useParams } from "react-router";
-
-import { getCompanyById } from "../lib/graphql/queries";
 import Loader from "../components/loader/Loader";
+import { useCompany } from "../lib/graphql/hooks/hooks";
 
 // Lazy Load
 const LazyJobList = lazy(() => import("../components/JobList"));
@@ -16,33 +15,13 @@ const LazyJobList = lazy(() => import("../components/JobList"));
 const CompanyPage = () => {
   const { companyId } = useParams();
 
-  const [state, setState] = useState({
-    company: null,
-    loading: true,
-    error: false,
-  });
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const company = await getCompanyById(companyId);
-
-        setState({ company, loading: false, error: false });
-      } catch (error) {
-        setState({
-          company: null,
-          loading: false,
-          error: true,
-        });
-      }
-    })();
-  }, [companyId]);
-
-  const { company, loading } = state;
+  const { company, loading, error } = useCompany(companyId);
 
   if (loading) {
     <Loader />;
-  } else {
+  }
+
+  if (error) {
     <div className="has-text-danger">Data Unavailable</div>;
   }
 

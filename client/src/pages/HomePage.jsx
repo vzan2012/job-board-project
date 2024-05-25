@@ -1,6 +1,6 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import Loader from "../components/loader/Loader";
-import { getJobs } from "../lib/graphql/queries";
+import { useJobs } from "../lib/graphql/hooks/hooks";
 
 // Lazy Load
 const LazyJobList = lazy(() => import("../components/JobList"));
@@ -11,17 +11,15 @@ const LazyJobList = lazy(() => import("../components/JobList"));
  * @returns {*}
  */
 const HomePage = () => {
-  const [jobs, setJobs] = useState([]);
+  const { jobs, loading, error } = useJobs();
 
-  useEffect(() => {
-    const getJobsData = async () => {
-      const data = await getJobs();
+  if (loading) {
+    <Loader />;
+  }
 
-      setJobs(data);
-    };
-
-    getJobsData();
-  }, []);
+  if (error) {
+    <div className="has-text-danger">Data Unavailable</div>;
+  }
 
   return (
     <div>

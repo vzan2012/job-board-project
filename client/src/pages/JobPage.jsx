@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
-import { formatDate } from "../lib/utils/formatters";
 import Loader from "../components/loader/Loader";
+import { formatDate } from "../lib/utils/formatters";
 
-import { getJobById } from "../lib/graphql/queries";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { useJob } from "../lib/graphql/hooks/hooks";
 
 /**
  * JobPage Component
@@ -13,27 +12,27 @@ import { Link } from "react-router-dom";
  */
 const JobPage = () => {
   const { jobId } = useParams();
-  const [job, setJob] = useState({});
+  const { job, loading, error } = useJob(jobId);
 
-  useEffect(() => {
-    getJobById(jobId).then(setJob);
-  }, [jobId]);
+  if (loading) {
+    <Loader />;
+  }
 
-  if (!job) return <Loader />;
-
-  const { title, company, date, description } = job;
+  if (error) {
+    <div className="has-text-danger">Data Unavailable</div>;
+  }
 
   return (
     <div>
-      <h1 className="title is-2">{title}</h1>
+      <h1 className="title is-2">{job?.title}</h1>
       <h2 className="subtitle is-4">
-        <Link to={`/companies/${company?.id}`}>{company?.name}</Link>
+        <Link to={`/companies/${job?.company?.id}`}>{job?.company?.name}</Link>
       </h2>
       <div className="box">
         <div className="block has-text-grey">
-          Posted: {date ? formatDate(date, "long") : ""}
+          Posted: {job?.date ? formatDate(job?.date, "long") : ""}
         </div>
-        <p className="block">{description}</p>
+        <p className="block">{job?.description}</p>
       </div>
     </div>
   );
