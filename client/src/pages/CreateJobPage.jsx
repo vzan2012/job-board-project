@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { createJob } from "../lib/graphql/queries";
+import { useCreateJob } from "../lib/graphql/hooks/hooks";
+import Loader from "../components/loader/Loader";
 
 /**
  * CreateJobPage Component
@@ -12,6 +12,7 @@ const CreateJobPage = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const { createJob, loading, error } = useCreateJob();
 
   /**
    * Submit Handler
@@ -20,10 +21,18 @@ const CreateJobPage = () => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const job = await createJob({ title, description });
-    const { id: jobId } = job;
+    const job = await createJob(title, description);
 
-    navigate(`/jobs/${jobId}`);
+    if (!loading) {
+      const { id: jobId } = job;
+      navigate(`/jobs/${jobId}`);
+    } else {
+      <Loader />;
+    }
+
+    if (error) {
+      <div className="has-text-danger">Data Unavailable</div>;
+    }
   };
 
   return (
@@ -55,7 +64,11 @@ const CreateJobPage = () => {
           </div>
           <div className="field">
             <div className="control">
-              <button className="button is-link" onClick={handleSubmit}>
+              <button
+                className="button is-link"
+                onClick={handleSubmit}
+                disabled={loading}
+              >
                 Submit
               </button>
             </div>

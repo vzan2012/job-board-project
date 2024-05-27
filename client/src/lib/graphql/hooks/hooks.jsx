@@ -1,5 +1,10 @@
-import { useQuery } from "@apollo/client";
-import { companyByIdQuery, jobByIdQuery, jobsQuery } from "../queries";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  companyByIdQuery,
+  createJobMutation,
+  jobByIdQuery,
+  jobsQuery,
+} from "../queries";
 
 /**
  * Company - Hook
@@ -43,4 +48,40 @@ export const useJob = (id) => {
   });
 
   return { job: data?.job, loading, error: Boolean(error) };
+};
+
+/**
+ * CreateJob - Hook
+ *
+ * @returns {{ createJob: (title: any, description: any) => unknown; loading: any; error: any; }}
+ */
+export const useCreateJob = () => {
+  const [mutuate, { loading, error }] = useMutation(createJobMutation);
+
+  const createJob = async (title, description) => {
+    const {
+      data: { job },
+    } = await mutuate({
+      variables: {
+        input: {
+          title,
+          description,
+        },
+      },
+      update: (cache, result) => {
+        const { data } = result;
+
+        cache.writeQuery({
+          query: jobByIdQuery,
+          variables: {
+            id: data.job.id,
+          },
+          data,
+        });
+      },
+    });
+    return job;
+  };
+
+  return { createJob, loading, error };
 };
