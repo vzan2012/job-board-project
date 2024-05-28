@@ -8,6 +8,7 @@ import { expressMiddleware as apolloMiddleware } from "@apollo/server/express4";
 import { resolvers } from "./resolvers.js";
 import { authMiddleware, handleLogin } from "./auth.js";
 import { getUser } from "./db/users.js";
+import { createCompanyLoader } from "./db/companies.js";
 
 const port = process.env.PORT;
 const environment = process.env.ENVIRONMENT;
@@ -31,11 +32,13 @@ await apolloServer.start();
  * @returns {unknown}
  */
 const getContext = async ({ req }) => {
+  const companyLoader = createCompanyLoader();
+
+  const context = { companyLoader };
   if (req.auth) {
-    const user = await getUser(req.auth.sub);
-    return { user };
+    context.user = await getUser(req.auth.sub);
   }
-  return {};
+  return context;
 };
 
 app.use(cors(), express.json(), authMiddleware);

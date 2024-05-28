@@ -12,3 +12,10 @@ export const connection = knex({
   },
   useNullAsDefault: true,
 });
+
+// Testing Purposes - how it works
+// connection.on("query", ({ sql, bindings }) => {
+//   const query = connection.raw(sql, bindings).toQuery();
+//   console.log(query);
+//   console.log(`------`);
+// });
